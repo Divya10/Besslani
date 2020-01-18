@@ -23,10 +23,9 @@ public class LoginActivity extends AppCompatActivity {
         // menu should be considered as top level destinations
         toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        navView.setSelectedItemId(R.id.navigation_customer);
 
-        toolbar.setTitle("Employee Login");
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener

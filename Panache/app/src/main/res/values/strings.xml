@@ -36,7 +36,8 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="openDrawer">open_drawer</string>
     <string name="closeDrawer">close_drawer</string>
-
+    <!--    facebook api id-->
+    <string name="facebook_app_id">800854360381376</string>
     <!-- Navigation Drawer menu labels -->
     <string name="nav_your_bookings">Your Bookings</string>
     <string name="nav_book_service">Book Service</string>

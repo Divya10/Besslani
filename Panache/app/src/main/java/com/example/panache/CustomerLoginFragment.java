@@ -36,7 +36,8 @@ import java.util.ArrayList;
 import java.util.List;
 import static android.Manifest.permission.READ_CONTACTS;
 import static androidx.core.content.ContextCompat.checkSelfPermission;
-
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 
 public class CustomerLoginFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -61,7 +62,7 @@ public class CustomerLoginFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private EmployeeLoginFragment.OnFragmentInteractionListener mListener;
+ //   private EmployeeLoginFragment.OnFragmentInteractionListener mListener;
     AutoCompleteTextView UserName;
     EditText Password;
     Button Submit;

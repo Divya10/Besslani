@@ -16,7 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".FeedbackActivity"></activity>
+        <activity android:name=".EmployeeMainActivity"></activity>
+        <activity android:name=".FeedbackActivity" />
         <activity android:name=".CustomerMainActivity" />
         <activity android:name=".PrivacyPolicyActivity" />
         <activity android:name=".AboutUsActivity" />
