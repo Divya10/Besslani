@@ -2,6 +2,7 @@ package com.example.panache;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -36,8 +37,28 @@ import java.util.ArrayList;
 import java.util.List;
 import static android.Manifest.permission.READ_CONTACTS;
 import static androidx.core.content.ContextCompat.checkSelfPermission;
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
+
+
+import android.util.Log;
+import android.widget.ImageView;
+
+
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.Profile;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Arrays;
+import java.util.Objects;
 
 public class CustomerLoginFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -62,12 +83,17 @@ public class CustomerLoginFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
- //   private EmployeeLoginFragment.OnFragmentInteractionListener mListener;
-    AutoCompleteTextView UserName;
-    EditText Password;
-    Button Submit;
-    ProgressBar progressBar;
-    View loginFormView;
+    //   private EmployeeLoginFragment.OnFragmentInteractionListener mListener;
+    private AutoCompleteTextView UserName;
+    private EditText Password;
+    private Button Submit;
+    private ProgressBar progressBar;
+    private View loginFormView;
+    private LoginButton loginButton;
+    private CallbackManager callbackManager;
+    private ImageView imageView;
+    private TextView txtUsername, txtEmail;
+
 
     public CustomerLoginFragment() {
         // Required empty public constructor
@@ -102,8 +128,9 @@ public class CustomerLoginFragment extends Fragment {
         Password = view.findViewById(R.id.password);
         progressBar = view.findViewById(R.id.loading);
         Submit = view.findViewById(R.id.login);
-        loginFormView=view.findViewById(R.id.Login_view);
+        loginFormView = view.findViewById(R.id.Login_view);
         populateAutoComplete();
+        //check for error build version
         Password.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -121,6 +148,49 @@ public class CustomerLoginFragment extends Fragment {
             }
         });
 
+        loginButton = view.findViewById(R.id.login_button);
+        imageView = view.findViewById(R.id.imageView);
+        txtUsername = view.findViewById(R.id.txtUsername);
+        txtEmail = view.findViewById(R.id.txtEmail);
+
+        boolean loggedOut = AccessToken.getCurrentAccessToken() == null;
+
+        if (!loggedOut) {
+            Picasso.with(getContext()).load(Profile.getCurrentProfile().getProfilePictureUri(200, 200)).into(imageView);
+            Log.d("TAG", "Username is: " + Profile.getCurrentProfile().getName());
+
+            //Using Graph API
+            getUserProfile(AccessToken.getCurrentAccessToken());
+        }
+
+        loginButton.setReadPermissions(Arrays.asList("email", "public_profile"));
+        callbackManager = CallbackManager.Factory.create();
+
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                // App code
+                //loginResult.getAccessToken();
+                //loginResult.getRecentlyDeniedPermissions()
+                //loginResult.getRecentlyGrantedPermissions()
+                //TODO: Add code for successfull login with facebook
+//                boolean loggedIn = AccessToken.getCurrentAccessToken() == null;
+//                Log.d("API123", loggedIn + " ??");
+                Intent intent =new Intent(getContext(),CustomerMainActivity.class);
+                startActivity(intent);
+
+            }
+
+            @Override
+            public void onCancel() {
+                // App code
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                // App code
+            }
+        });
 
         return view;
     }
@@ -128,7 +198,7 @@ public class CustomerLoginFragment extends Fragment {
 
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {
-            return;
+            return ;
         }
         //getLoaderManager().initLoader(0, null, LoginActivity.this);
     }
@@ -138,7 +208,7 @@ public class CustomerLoginFragment extends Fragment {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return true;
         }
-        if(checkSelfPermission(getContext(),READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+        if (checkSelfPermission(Objects.requireNonNull(getContext()), READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
             return true;
         }
         if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
@@ -217,7 +287,9 @@ public class CustomerLoginFragment extends Fragment {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
+            //check for android version error
             mAuthTask = new UserLoginTask(email, password);
+            //version error check
             mAuthTask.execute((Void) null);
         }
     }
@@ -235,40 +307,34 @@ public class CustomerLoginFragment extends Fragment {
     /**
      * Shows the progress UI and hides the login form.
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+        int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-            loginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            loginFormView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    loginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
-            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
-            progressBar.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
-            loginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
+        loginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        loginFormView.animate().setDuration(shortAnimTime).alpha(
+                show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                loginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            }
+        });
+        progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+        progressBar.animate().setDuration(shortAnimTime).alpha(
+                show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            }
+        });
     }
-    public Loader<Cursor> onCreateLoader ( int i, Bundle bundle){
-        return new CursorLoader(getContext(),
+
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        //check for version error
+        return new CursorLoader(Objects.requireNonNull(getContext()),
                 Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
                         ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
 
@@ -280,10 +346,11 @@ public class CustomerLoginFragment extends Fragment {
                 // Show primary email addresses first. Note that there won't be
                 // a primary email address if the user hasn't specified one.
                 ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
+        //version error
     }
 
 
-    public void onLoadFinished (Loader < Cursor > cursorLoader, Cursor cursor){
+    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         List<String> emails = new ArrayList<>();
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -294,13 +361,13 @@ public class CustomerLoginFragment extends Fragment {
         addEmailsToAutoComplete(emails);
     }
 
-    public void onLoaderReset (Loader < Cursor > cursorLoader) {
+    public void onLoaderReset(Loader<Cursor> cursorLoader) {
     }
 
-    void addEmailsToAutoComplete(List<String>emailAddressCollection){
+    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(getContext(), android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
+                new ArrayAdapter<>(Objects.requireNonNull(getContext()), android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
         UserName.setAdapter(adapter);
     }
@@ -317,62 +384,100 @@ public class CustomerLoginFragment extends Fragment {
 
 
     /**
- * Represents an asynchronous login/registration task used to authenticate
- * the user.
- */
-        class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+     * Represents an asynchronous login/registration task used to authenticate
+     * the user.
+     */
+    //checlk for version error
+    class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
-            private final String mEmail;
-            private final String mPassword;
+        private final String mEmail;
+        private final String mPassword;
 
-            UserLoginTask(String email, String password) {
-                mEmail = email;
-                mPassword = password;
+        UserLoginTask(String email, String password) {
+            mEmail = email;
+            mPassword = password;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            // TODO: attempt authentication against a network service.
+            Intent i = new Intent(getContext(), CustomerMainActivity.class);
+            startActivity(i);
+            try {
+                // Simulate network access.
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                return false;
             }
 
-            @Override
-            protected Boolean doInBackground(Void... params) {
-                // TODO: attempt authentication against a network service.
-               Intent i=new Intent(getContext(),CustomerMainActivity.class);
-               startActivity(i);
-                try {
-                    // Simulate network access.
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    return false;
+            for (String credential : DUMMY_CREDENTIALS) {
+                String[] pieces = credential.split(":");
+                if (pieces[0].equals(mEmail)) {
+                    // Account exists, return true if the password matches.
+                    return pieces[1].equals(mPassword);
                 }
+            }
 
-                for (String credential : DUMMY_CREDENTIALS) {
-                    String[] pieces = credential.split(":");
-                    if (pieces[0].equals(mEmail)) {
-                        // Account exists, return true if the password matches.
-                        return pieces[1].equals(mPassword);
+            // TODO: register the new account here.
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            mAuthTask = null;
+            showProgress(false);
+
+            if (success) {
+                Objects.requireNonNull(getActivity()).finish();
+            } else {
+                Password.setError(getString(R.string.error_incorrect_password));
+                Password.requestFocus();
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            mAuthTask = null;
+            showProgress(false);
+        }
+
+    }
+    private void getUserProfile(AccessToken currentAccessToken) {
+        GraphRequest request = GraphRequest.newMeRequest(
+                currentAccessToken, new GraphRequest.GraphJSONObjectCallback() {
+                    @SuppressLint("SetTextI18n")
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        Log.d("TAG", object.toString());
+                        try {
+                            String first_name = object.getString("first_name");
+                            String last_name = object.getString("last_name");
+                            String email = object.getString("email");
+                            String id = object.getString("id");
+                            String image_url = "https://graph.facebook.com/" + id + "/picture?type=normal";
+
+                            txtUsername.setText("First Name: " + first_name + "\nLast Name: " + last_name);
+                            txtEmail.setText(email);
+                            Picasso.with(getContext()).load(image_url).into(imageView);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
                     }
-                }
+                });
 
-                // TODO: register the new account here.
-                return true;
-            }
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "first_name,last_name,email,id");
+        request.setParameters(parameters);
+        request.executeAsync();
 
-            @Override
-            protected void onPostExecute(final Boolean success) {
-                mAuthTask = null;
-                showProgress(false);
+    }
 
-                if (success) {
-                    getActivity().finish();
-                } else {
-                    Password.setError(getString(R.string.error_incorrect_password));
-                    Password.requestFocus();
-                }
-            }
-
-            @Override
-            protected void onCancelled() {
-                mAuthTask = null;
-                showProgress(false);
-            }
-
-            }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
 }

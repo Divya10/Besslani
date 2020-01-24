@@ -38,6 +38,7 @@
     <string name="closeDrawer">close_drawer</string>
     <!--    facebook api id-->
     <string name="facebook_app_id">800854360381376</string>
+    <string name="fb_login_protocol_scheme">fb800854360381376</string>
     <!-- Navigation Drawer menu labels -->
     <string name="nav_your_bookings">Your Bookings</string>
     <string name="nav_book_service">Book Service</string>
