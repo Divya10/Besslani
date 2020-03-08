@@ -49,15 +49,15 @@
         app:layout_constraintTop_toBottomOf="@+id/password"
         app:layout_constraintVertical_bias="0.2" />
 
-        <com.facebook.login.widget.LoginButton
-            android:id="@+id/login_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/com_facebook_likeview_internal_padding"
-            android:paddingTop="@dimen/com_facebook_likeview_internal_padding"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/fab_margin"
-            app:layout_constraintBottom_toBottomOf="parent" />
+<!--        <com.facebook.login.widget.LoginButton-->
+<!--            android:id="@+id/login_button"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:paddingBottom="@dimen/com_facebook_likeview_internal_padding"-->
+<!--            android:paddingTop="@dimen/com_facebook_likeview_internal_padding"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:layout_marginTop="@dimen/fab_margin"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent" />-->
 
     <ProgressBar
         android:id="@+id/loading"
