@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -19,6 +20,7 @@ import androidx.loader.content.Loader;
 
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,8 +40,6 @@ import java.util.List;
 import static android.Manifest.permission.READ_CONTACTS;
 import static androidx.core.content.ContextCompat.checkSelfPermission;
 
-
-import android.util.Log;
 import android.widget.ImageView;
 
 
@@ -47,15 +47,9 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-import com.facebook.Profile;
+
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.squareup.picasso.Picasso;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -149,19 +143,17 @@ public class CustomerLoginFragment extends Fragment {
         });
 
         loginButton = view.findViewById(R.id.login_button);
-        imageView = view.findViewById(R.id.imageView);
-        txtUsername = view.findViewById(R.id.txtUsername);
-        txtEmail = view.findViewById(R.id.txtEmail);
+
 
         boolean loggedOut = AccessToken.getCurrentAccessToken() == null;
 
-        if (!loggedOut) {
-            Picasso.with(getContext()).load(Profile.getCurrentProfile().getProfilePictureUri(200, 200)).into(imageView);
-            Log.d("TAG", "Username is: " + Profile.getCurrentProfile().getName());
-
-            //Using Graph API
-            getUserProfile(AccessToken.getCurrentAccessToken());
-        }
+//        if (!loggedOut) {
+//            Picasso.with(getContext()).load(Profile.getCurrentProfile().getProfilePictureUri(200, 200)).into(imageView);
+//            Log.d("TAG", "Username is: " + Profile.getCurrentProfile().getName());
+//
+//            //Using Graph API
+//            getUserProfile(AccessToken.getCurrentAccessToken());
+//        }
 
         loginButton.setReadPermissions(Arrays.asList("email", "public_profile"));
         callbackManager = CallbackManager.Factory.create();
@@ -170,12 +162,12 @@ public class CustomerLoginFragment extends Fragment {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 // App code
-                //loginResult.getAccessToken();
-                //loginResult.getRecentlyDeniedPermissions()
-                //loginResult.getRecentlyGrantedPermissions()
+                loginResult.getAccessToken();
+                loginResult.getRecentlyDeniedPermissions();
+                loginResult.getRecentlyGrantedPermissions();
                 //TODO: Add code for successfull login with facebook
-//                boolean loggedIn = AccessToken.getCurrentAccessToken() == null;
-//                Log.d("API123", loggedIn + " ??");
+                boolean loggedIn = AccessToken.getCurrentAccessToken() == null;
+                Log.d("API123", loggedIn + " ??");
                 Intent intent =new Intent(getContext(),CustomerMainActivity.class);
                 startActivity(intent);
 
@@ -184,11 +176,13 @@ public class CustomerLoginFragment extends Fragment {
             @Override
             public void onCancel() {
                 // App code
+                new AlertDialog.Builder(getContext()).setMessage("cancelled");
             }
 
             @Override
             public void onError(FacebookException exception) {
                 // App code
+                new AlertDialog.Builder(getContext()).setMessage(""+exception);
             }
         });
 
@@ -442,37 +436,41 @@ public class CustomerLoginFragment extends Fragment {
         }
 
     }
-    private void getUserProfile(AccessToken currentAccessToken) {
-        GraphRequest request = GraphRequest.newMeRequest(
-                currentAccessToken, new GraphRequest.GraphJSONObjectCallback() {
-                    @SuppressLint("SetTextI18n")
-                    @Override
-                    public void onCompleted(JSONObject object, GraphResponse response) {
-                        Log.d("TAG", object.toString());
-                        try {
-                            String first_name = object.getString("first_name");
-                            String last_name = object.getString("last_name");
-                            String email = object.getString("email");
-                            String id = object.getString("id");
-                            String image_url = "https://graph.facebook.com/" + id + "/picture?type=normal";
-
-                            txtUsername.setText("First Name: " + first_name + "\nLast Name: " + last_name);
-                            txtEmail.setText(email);
-                            Picasso.with(getContext()).load(image_url).into(imageView);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                });
-
-        Bundle parameters = new Bundle();
-        parameters.putString("fields", "first_name,last_name,email,id");
-        request.setParameters(parameters);
-        request.executeAsync();
-
-    }
+//    private void getUserProfile(AccessToken currentAccessToken) {
+//        GraphRequest request = GraphRequest.newMeRequest(
+//                currentAccessToken, new GraphRequest.GraphJSONObjectCallback() {
+//                    @SuppressLint("SetTextI18n")
+//                    @Override
+//                    public void onCompleted(JSONObject object, GraphResponse response) {
+//                        Log.d("TAG", object.toString());
+//                        try {
+//                            String first_name = object.getString("first_name");
+//                            String last_name = object.getString("last_name");
+//                            String email = object.getString("email");
+//                            String id = object.getString("id");
+//                            String image_url = "https://graph.facebook.com/" + id + "/picture?type=normal";
+//
+//                            txtUsername.setText("First Name: " + first_name + "\nLast Name: " + last_name);
+//                            txtEmail.setText(email);
+////                            Picasso.with(getContext()).load(image_url).into(imageView);
+//                            Intent intent =new Intent(getContext(),CustomerMainActivity.class);
+//                            startActivity(intent);
+//
+//
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//
+//                        }
+//
+//                    }
+//                });
+//
+//        Bundle parameters = new Bundle();
+//        parameters.putString("fields", "first_name,last_name,email,id");
+//        request.setParameters(parameters);
+//        request.executeAsync();
+//
+//    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

@@ -59,29 +59,6 @@
         app:layout_constraintTop_toBottomOf="@+id/password"
         app:layout_constraintVertical_bias="0.2" />
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:src="@mipmap/ic_launcher"
-            android:layout_width="100dp"
-            android:layout_height="100dp" />
-
-        <TextView
-            android:id="@+id/txtUsername"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Username"
-            android:padding="8dp"
-            android:textColor="#FFF" />
-
-        <TextView
-            android:id="@+id/txtEmail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Email Address"
-            android:padding="8dp"
-            android:textColor="#FFF" />
-
-
         <com.facebook.login.widget.LoginButton
             android:id="@+id/login_button"
             android:layout_width="wrap_content"
