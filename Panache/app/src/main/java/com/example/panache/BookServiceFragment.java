@@ -28,7 +28,8 @@ public class BookServiceFragment extends Fragment {
         // Inflate the layout for this fragment
         view= inflater.inflate(R.layout.fragment_book, container, false);
         navView = view.findViewById(R.id.navigation);
-
+        Fragment fragment = new BookNowFragment();
+        loadFragment(fragment);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         return view;
@@ -41,19 +42,15 @@ public class BookServiceFragment extends Fragment {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {         Fragment fragment;
-            switch (item.getItemId()) {
-                case R.id.navigation_book:
-                    //toolbar.setTitle("Employee Login");
-                    fragment = new BookNowFragment();
-                    loadFragment(fragment);
-                    return true;
-                case R.id.navigation_schedule:
-                    //toolbar.setTitle("Customer Login");
-                    fragment = new ScheduleFragment();
-                    loadFragment(fragment);
-                    return true;
+            //toolbar.setTitle("Employee Login");
+            if (item.getItemId() == R.id.navigation_schedule) {//toolbar.setTitle("Customer Login");
+                fragment = new ScheduleFragment();
+                loadFragment(fragment);
+                return true;
             }
-            return false;
+            fragment = new BookNowFragment();
+            loadFragment(fragment);
+            return true;
         }
     };
 
