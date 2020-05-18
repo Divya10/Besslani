@@ -142,49 +142,49 @@ public class CustomerLoginFragment extends Fragment {
             }
         });
 
-//        loginButton = view.findViewById(R.id.login_button);
+        loginButton = view.findViewById(R.id.login_button);
+
+
+        boolean loggedOut = AccessToken.getCurrentAccessToken() == null;
+
+//        if (!loggedOut) {
+//            Picasso.with(getContext()).load(Profile.getCurrentProfile().getProfilePictureUri(200, 200)).into(imageView);
+//            Log.d("TAG", "Username is: " + Profile.getCurrentProfile().getName());
 //
-//
-//        boolean loggedOut = AccessToken.getCurrentAccessToken() == null;
-//
-////        if (!loggedOut) {
-////            Picasso.with(getContext()).load(Profile.getCurrentProfile().getProfilePictureUri(200, 200)).into(imageView);
-////            Log.d("TAG", "Username is: " + Profile.getCurrentProfile().getName());
-////
-////            //Using Graph API
-////            getUserProfile(AccessToken.getCurrentAccessToken());
-////        }
-//
-//        loginButton.setReadPermissions(Arrays.asList("email", "public_profile"));
-//        callbackManager = CallbackManager.Factory.create();
-//
-//        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-//            @Override
-//            public void onSuccess(LoginResult loginResult) {
-//                // App code
-//                loginResult.getAccessToken();
-//                loginResult.getRecentlyDeniedPermissions();
-//                loginResult.getRecentlyGrantedPermissions();
-//                //TODO: Add code for successfull login with facebook
-//                boolean loggedIn = AccessToken.getCurrentAccessToken() == null;
-//                Log.d("API123", loggedIn + " ??");
-//                Intent intent =new Intent(getContext(),CustomerMainActivity.class);
-//                startActivity(intent);
-//
-//            }
-//
-//            @Override
-//            public void onCancel() {
-//                // App code
-//                new AlertDialog.Builder(getContext()).setMessage("cancelled");
-//            }
-//
-//            @Override
-//            public void onError(FacebookException exception) {
-//                // App code
-//                new AlertDialog.Builder(getContext()).setMessage(""+exception);
-//            }
-//        });
+//            //Using Graph API
+//            getUserProfile(AccessToken.getCurrentAccessToken());
+//        }
+
+        loginButton.setReadPermissions(Arrays.asList("email", "public_profile"));
+        callbackManager = CallbackManager.Factory.create();
+
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                // App code
+                loginResult.getAccessToken();
+                loginResult.getRecentlyDeniedPermissions();
+                loginResult.getRecentlyGrantedPermissions();
+                //TODO: Add code for successfull login with facebook
+                boolean loggedIn = AccessToken.getCurrentAccessToken() == null;
+                Log.d("API123", loggedIn + " ??");
+                Intent intent =new Intent(getContext(),CustomerMainActivity.class);
+                startActivity(intent);
+
+            }
+
+            @Override
+            public void onCancel() {
+                // App code
+                new AlertDialog.Builder(getContext()).setMessage("cancelled");
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                // App code
+                new AlertDialog.Builder(getContext()).setMessage(""+exception);
+            }
+        });
 
         return view;
     }
