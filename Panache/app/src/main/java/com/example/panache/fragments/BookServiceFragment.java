@@ -1,4 +1,4 @@
-package com.example.panache;
+package com.example.panache.fragments;
 
 import android.os.Bundle;
 
@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.panache.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class BookServiceFragment extends Fragment {

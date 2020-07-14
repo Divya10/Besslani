@@ -13,9 +13,29 @@ android {
     }
     buildTypes {
         release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "BASE_URL", '""'
+            buildConfigField "String", "SECRET_KEY", '"Secret_key"'
+            buildConfigField "String", "IV", '"123789456"'
+        }
+        debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "BASE_URL", '""'
+            buildConfigField "String", "SECRET_KEY", '"Secret_key"'
+            buildConfigField "String", "IV", '"123789456"'
         }
+    }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+    dataBinding {
+        enabled = true
+    }
+    dexOptions {
+        javaMaxHeapSize "4g"
     }
 }
 

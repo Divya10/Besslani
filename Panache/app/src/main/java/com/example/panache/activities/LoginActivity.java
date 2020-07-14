@@ -1,4 +1,4 @@
-package com.example.panache;
+package com.example.panache.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +9,9 @@ import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.panache.fragments.CustomerLoginFragment;
+import com.example.panache.fragments.EmployeeLoginFragment;
+import com.example.panache.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class LoginActivity extends AppCompatActivity {

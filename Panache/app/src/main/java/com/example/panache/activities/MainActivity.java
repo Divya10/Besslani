@@ -1,9 +1,11 @@
-package com.example.panache;
+package com.example.panache.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+
+import com.example.panache.R;
 
 public class MainActivity extends AppCompatActivity {
 

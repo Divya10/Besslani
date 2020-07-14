@@ -18,14 +18,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".EmployeeMainActivity"/>
-        <activity android:name=".FeedbackActivity" />
-        <activity android:name=".CustomerMainActivity" />
-        <activity android:name=".PrivacyPolicyActivity" />
-        <activity android:name=".AboutUsActivity" />
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".LogoActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".activities.EmployeeMainActivity"/>
+        <activity android:name=".activities.FeedbackActivity" />
+        <activity android:name=".activities.CustomerMainActivity" />
+        <activity android:name=".activities.PrivacyPolicyActivity" />
+        <activity android:name=".activities.AboutUsActivity" />
+        <activity android:name=".activities.LoginActivity" />
+        <activity android:name=".activities.LogoActivity" />
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

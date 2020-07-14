@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:id="@+id/Login_view"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".EmployeeLoginFragment">
+    tools:context=".fragments.EmployeeLoginFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout

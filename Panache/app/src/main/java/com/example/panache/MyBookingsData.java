@@ -1,9 +1,9 @@
 package com.example.panache;
 
-public class mybookingsdata {
+public class MyBookingsData {
         private String description;
         private int imgId;
-        public mybookingsdata(String description, int imgId) {
+        public MyBookingsData(String description, int imgId) {
             this.description = description;
             this.imgId = imgId;
         }

@@ -1,8 +1,7 @@
-package com.example.panache;
+package com.example.panache.fragments;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -33,6 +32,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.panache.R;
+import com.example.panache.activities.CustomerMainActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -168,7 +169,7 @@ public class CustomerLoginFragment extends Fragment {
                 //TODO: Add code for successfull login with facebook
                 boolean loggedIn = AccessToken.getCurrentAccessToken() == null;
                 Log.d("API123", loggedIn + " ??");
-                Intent intent =new Intent(getContext(),CustomerMainActivity.class);
+                Intent intent =new Intent(getContext(), CustomerMainActivity.class);
                 startActivity(intent);
 
             }

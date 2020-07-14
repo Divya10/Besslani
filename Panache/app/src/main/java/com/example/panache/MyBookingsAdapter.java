@@ -12,11 +12,11 @@ import androidx.recyclerview.widget.RecyclerView.Adapter;
 
 
 
-public class myBookingsAdapter extends Adapter<myBookingsAdapter.ViewHolder>{
-        private mybookingsdata[] listdata;
+public class MyBookingsAdapter extends Adapter<MyBookingsAdapter.ViewHolder>{
+        private MyBookingsData[] listdata;
 
         // RecyclerView recyclerView;
-        public myBookingsAdapter(mybookingsdata[] listdata) {
+        public MyBookingsAdapter(MyBookingsData[] listdata) {
             this.listdata = listdata;
         }
         @Override
@@ -29,7 +29,7 @@ public class myBookingsAdapter extends Adapter<myBookingsAdapter.ViewHolder>{
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            final mybookingsdata mybookingsdata = listdata[position];
+            final MyBookingsData mybookingsdata = listdata[position];
             holder.textView.setText(listdata[position].getDescription());
             holder.imageView.setImageResource(listdata[position].getImgId());
             holder.relativeLayout.setOnClickListener(new View.OnClickListener() {

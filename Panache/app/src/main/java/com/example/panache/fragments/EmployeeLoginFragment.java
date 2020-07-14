@@ -1,4 +1,4 @@
-package com.example.panache;
+package com.example.panache.fragments;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -29,8 +29,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toolbar;
 
+import com.example.panache.R;
+import com.example.panache.activities.EmployeeMainActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -333,7 +334,7 @@ public class EmployeeLoginFragment extends Fragment {
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
-            Intent i=new Intent(getContext(),EmployeeMainActivity.class);
+            Intent i=new Intent(getContext(), EmployeeMainActivity.class);
             startActivity(i);
             try {
                 // Simulate network access.

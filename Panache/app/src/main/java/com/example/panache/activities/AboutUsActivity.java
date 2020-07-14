@@ -1,8 +1,10 @@
-package com.example.panache;
+package com.example.panache.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.panache.R;
 
 public class AboutUsActivity extends AppCompatActivity {
 

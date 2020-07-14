@@ -1,5 +1,6 @@
-package com.example.panache;
+package com.example.panache.fragments;
 
+import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 
@@ -9,18 +10,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
 
-import java.util.Calendar;
-//import com.timesliderrangepicker.library.TimeSliderRangePicker;
+import com.example.panache.R;
 
-public class BookNowFragment extends Fragment {
+import java.util.Calendar;
+
+
+public class ScheduleFragment extends Fragment {
     View view;
-    Button btnInTimePicker,btnOutTimePicker;
-    EditText  txtInTime,txtOutTime;
-    private int  mHour, mMinute;
-//    TimeSliderRangePicker timeSliderRangePicker;
+    Button btnDatePicker, btnInTimePicker,btnOutTimePicker;
+    EditText txtDate, txtInTime,txtOutTime;
+    private int mYear, mMonth, mDay, mHour, mMinute;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,11 +34,40 @@ public class BookNowFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view= inflater.inflate(R.layout.fragment_book_now, container, false);
+        view = inflater.inflate(R.layout.fragment_schedule, container, false);
+        btnDatePicker = (Button) view.findViewById(R.id.btn_date);
         btnInTimePicker = (Button) view.findViewById(R.id.btn_in_time);
         btnOutTimePicker = (Button) view.findViewById(R.id.btn_out_time);
+        txtDate = (EditText) view.findViewById(R.id.in_date);
         txtInTime = (EditText) view.findViewById(R.id.in_time);
         txtOutTime = (EditText) view.findViewById(R.id.out_time);
+        btnDatePicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                    // Get Current Date
+                    final Calendar c = Calendar.getInstance();
+                    mYear = c.get(Calendar.YEAR);
+                    mMonth = c.get(Calendar.MONTH);
+                    mDay = c.get(Calendar.DAY_OF_MONTH);
+
+
+                    DatePickerDialog datePickerDialog = new DatePickerDialog(view.getContext(),
+                            new DatePickerDialog.OnDateSetListener() {
+
+                                @Override
+                                public void onDateSet(DatePicker view, int year,
+                                                      int monthOfYear, int dayOfMonth) {
+
+                                    txtDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+
+                                }
+                            }, mYear, mMonth, mDay);
+                    datePickerDialog.show();
+                }
+
+
+        });
         btnInTimePicker.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,9 +110,8 @@ public class BookNowFragment extends Fragment {
                 timePickerDialog.show();
             }
         }));
+        return view;
 
-    return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
 }
